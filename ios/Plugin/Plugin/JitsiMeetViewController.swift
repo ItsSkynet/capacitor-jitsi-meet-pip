@@ -51,7 +51,7 @@ public class JitsiMeetViewController: UIViewController, UIGestureRecognizerDeleg
         
         //New code by Amol
         pipViewCoordinator = PiPViewCoordinator(withView: jitsiMeetView)
-        pipViewCoordinator?.configureAsStickyView(withParentView: view.window)
+        pipViewCoordinator?.configureAsStickyView(withParentView: view)
         
         // animate in
         //jitsiMeetView.alpha = 0
