@@ -27,6 +27,7 @@ public class JitsiMeetViewController: UIViewController, UIGestureRecognizerDeleg
 
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        let rect = CGRect(origin: CGPoint.zero, size: size)
         pipViewCoordinator?.resetBounds(bounds: rect)
         print("[Jitsi Plugin Native iOS]: JitsiMeetViewController::viewWillTransition");
     }
