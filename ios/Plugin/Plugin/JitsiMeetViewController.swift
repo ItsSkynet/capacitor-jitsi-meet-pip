@@ -27,6 +27,7 @@ public class JitsiMeetViewController: UIViewController, UIGestureRecognizerDeleg
 
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
+        pipViewCoordinator?.resetBounds(bounds: rect)
         print("[Jitsi Plugin Native iOS]: JitsiMeetViewController::viewWillTransition");
     }
 
@@ -44,12 +45,18 @@ public class JitsiMeetViewController: UIViewController, UIGestureRecognizerDeleg
         // Enable jitsimeet view to be a view that can be displayed
         // on top of all the things, and let the coordinator to manage
         // the view state and interactions
+        // pipViewCoordinator = PiPViewCoordinator(withView: jitsiMeetView)
+        // pipViewCoordinator?.configureAsStickyView(withParentView: view)
+        
+        //New code by Amol
         pipViewCoordinator = PiPViewCoordinator(withView: jitsiMeetView)
-        pipViewCoordinator?.configureAsStickyView(withParentView: view)
-
+        pipViewCoordinator?.configureAsStickyView(withParentView: view.window)
+        
         // animate in
-        jitsiMeetView.alpha = 1
+        //jitsiMeetView.alpha = 0
         pipViewCoordinator?.show()
+        //as soon as start meet open in pip mode
+        enterPicture(inPicture: [:])
     }
 
     public override func viewDidDisappear(_ animated: Bool) {
@@ -62,6 +69,7 @@ public class JitsiMeetViewController: UIViewController, UIGestureRecognizerDeleg
         print("[Jitsi Plugin Native iOS]: JitsiMeetViewController::cleanUp");
         jitsiMeetView?.removeFromSuperview()
         jitsiMeetView = nil
+        pipViewCoordinator = nil
     }
 
     public func leave() {
@@ -81,6 +89,27 @@ protocol JitsiMeetViewControllerDelegate: AnyObject {
 
 // MARK: JitsiMeetViewDelegate
 extension JitsiMeetViewController: JitsiMeetViewDelegate {
+    func enterPicture(inPicture data: [AnyHashable : Any]!) {
+        self.view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+    
+        var mutatedData = data
+        mutatedData?.updateValue("onPictureInPictureWillEnter", forKey: "event")
+        self.eventSink?(mutatedData)
+        DispatchQueue.main.async {
+            self.pipViewCoordinator?.enterPictureInPicture()
+        }
+        
+                print("CONFERENCE PIP IN \(mutatedData)")
+    
+    }
+    
+    func exitPictureInPicture() {
+        var mutatedData : [AnyHashable : Any]
+        mutatedData = ["event":"onPictureInPictureTerminated"]
+        self.eventSink?(mutatedData)
+                print("CONFERENCE PIP OUT \(mutatedData)")
+    
+    }
 
     @objc public func conferenceJoined(_ data: NSDictionary) {
         print("[Jitsi Plugin Native iOS]: JitsiMeetViewController::conference joined");
@@ -103,12 +132,10 @@ extension JitsiMeetViewController: JitsiMeetViewDelegate {
         }
     }
 
-    @objc public func ready(toClose: [AnyHashable : Any]!) {
-        print("[Jitsi Plugin Native iOS]: JitsiMeetViewController::ready to close");
-        delegate?.onConferenceLeft()
-        self.cleanUp()
-
-        self.dismiss(animated: true, completion: nil); // e.g. user ends the call. This is preferred over conferenceLeft to shorten the white screen while exiting the room
+    func ready(toClose data: [AnyHashable : Any]!) {
+        self.pipViewCoordinator?.hide() { _ in
+            self.cleanUp()
+        }
     }
 
     @objc public func conferenceTerminated(_ data: NSDictionary) {
