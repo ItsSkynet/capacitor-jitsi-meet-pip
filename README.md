@@ -8,7 +8,7 @@ A few ideas are already being tested:
 - When executing Jitsi Capacitor, append a simulated PIP movable window inside webview (as a return function), then on pip mode, move storyboard out of the way and re-trigger it through a plugin function.
 - When executing PIP mode, figure out a way to send frames from video if needed, or just send a callback to JS with participants information and active participant info. (more complicated)
 - Re-Factor Plugin to instead become an appendable piece of code in the main capacitor activity/storyboard, since problem lies in storyboard being rendered on top of main view.
-- Re-Factor Plugin to be able to access main view with additional code modification to main class, but this will prevent web compilers from working.
+- Re-Factor Plugin to be able to access main view with additional code modification to main class, but this will prevent web compilers from working, but will allow to render inside main view instead of a separate storyboard.
 
 This Capacitor plugin is created to make video calls through the free, open-sourced Jitsi video platform (https://meet.jit.si) on iOS and Android.
 
