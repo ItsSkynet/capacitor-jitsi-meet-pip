@@ -56,8 +56,8 @@ public class JitsiMeetViewController: UIViewController, UIGestureRecognizerDeleg
         // animate in
         //jitsiMeetView.alpha = 0
         pipViewCoordinator?.show()
-        //as soon as start meet open in pip mode
-        enterPicture(inPicture: [:])
+        // uncomment line below to start meet in pip mode
+        // enterPicture(inPicture: [:])
     }
 
     public override func viewDidDisappear(_ animated: Bool) {
