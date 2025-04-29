@@ -90,11 +90,11 @@ protocol JitsiMeetViewControllerDelegate: AnyObject {
 
 // MARK: JitsiMeetViewDelegate
 extension JitsiMeetViewController: JitsiMeetViewDelegate {
-    func enterPicture(inPicture data: [AnyHashable : Any]!) {
+    public func enterPicture(inPicture data: [AnyHashable : Any]!) {
         self.pipViewCoordinator?.enterPictureInPicture()
     }
     
-    func exitPictureInPicture() {
+    public func exitPictureInPicture(inPicture data: [AnyHashable : Any]!) {
        self.pipViewCoordinator?.exitPictureInPicture()
     }
 
@@ -119,7 +119,7 @@ extension JitsiMeetViewController: JitsiMeetViewDelegate {
         }
     }
 
-    func ready(toClose data: [AnyHashable : Any]!) {
+    public func ready(toClose data: [AnyHashable : Any]!) {
         self.pipViewCoordinator?.hide() { _ in
             self.cleanUp()
         }
