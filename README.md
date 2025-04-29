@@ -1,6 +1,8 @@
 # Jitsi Meet Capacitor Plugin for Ionic Apps
 <img src="https://img.shields.io/npm/v/capacitor-jitsi-meet?style=flat-square" />
 
+[edit notes] Working to some extent, PIP works, but storybooard overlays on top of webview
+
 This Capacitor plugin is created to make video calls through the free, open-sourced Jitsi video platform (https://meet.jit.si) on iOS and Android.
 
 ## Compatibility to Capacitor Versions
