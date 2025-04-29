@@ -91,25 +91,11 @@ protocol JitsiMeetViewControllerDelegate: AnyObject {
 // MARK: JitsiMeetViewDelegate
 extension JitsiMeetViewController: JitsiMeetViewDelegate {
     func enterPicture(inPicture data: [AnyHashable : Any]!) {
-        self.view.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
-    
-        var mutatedData = data
-        mutatedData?.updateValue("onPictureInPictureWillEnter", forKey: "event")
-        self.eventSink?(mutatedData)
-        DispatchQueue.main.async {
-            self.pipViewCoordinator?.enterPictureInPicture()
-        }
-        
-                print("CONFERENCE PIP IN \(mutatedData)")
-    
+        self.pipViewCoordinator?.enterPictureInPicture()
     }
     
     func exitPictureInPicture() {
-        var mutatedData : [AnyHashable : Any]
-        mutatedData = ["event":"onPictureInPictureTerminated"]
-        self.eventSink?(mutatedData)
-                print("CONFERENCE PIP OUT \(mutatedData)")
-    
+       self.pipViewCoordinator?.exitPictureInPicture()
     }
 
     @objc public func conferenceJoined(_ data: NSDictionary) {
